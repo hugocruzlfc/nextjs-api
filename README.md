@@ -1,40 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+## Deployment and “SPA Mode” considerations
 
-## Getting Started
+Next.js can be deployed in two main ways:
 
-First, run the development server:
+### Standard Node.js deployment
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+The standard Next.js server deployment using next start enables you to use features like Route Handlers, Server Components, Middleware and more – while taking advantage of dynamic, request time information.
+
+There is no additional configuration required. See [Deploying](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+### SPA/Static Export
+
+Next.js also supports outputting your entire site as a [static Single-Page Application (SPA)](https://nextjs.org/docs/app/building-your-application/upgrading/single-page-applications).
+
+You can enable this by setting:
+
+```typescript
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  output: "export",
+};
+
+export default nextConfig;
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+In static export mode, Next.js will generate purely static HTML, CSS, and JS. You cannot run server-side code (like API endpoints). If you still need an API, you’d have to host it separately (e.g., a standalone Node.js server).
 
-You can start editing the page by modifying `app/route.ts`. The page auto-updates as you edit the file.
+### Note
 
-## Learn More
+GET Route Handlers can be statically exported if they don’t rely on dynamic request data. They become static files in your out folder.
+All other server features (dynamic requests, rewriting cookies, etc.) are not supported in a pure SPA export.
 
-To learn more about Next.js, take a look at the following resources:
+## Deploying APIs on Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## API Routes
-
-This directory contains example API routes for the headless API app.
-
-For more details, see [route.js file convention](https://nextjs.org/docs/app/api-reference/file-conventions/route).
+If you are deploying your Next.js application to Vercel, we have a guide on [deploying APIs](https://vercel.com/guides/hosting-backend-apis). This includes other Vercel features like [programmatic rate-limiting](https://vercel.com/docs/vercel-waf/rate-limiting-sdk) through the Vercel Firewall. Vercel also offers [Cron Jobs](https://vercel.com/docs/cron-jobs/manage-cron-jobs), which are commonly needed with API approaches.
